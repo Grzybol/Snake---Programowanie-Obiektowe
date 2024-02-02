@@ -4,16 +4,16 @@ using System.Threading;
 
 class Program
 {
-    static int screenWidth = 80; // Szerokość konsoli
-    static int screenHeight = 40; // Wysokość konsoli
+    static int screenWidth = 40; // Szerokość konsoli
+    static int screenHeight = 20; // Wysokość konsoli
     static int snakeX, snakeY, fruitX, fruitY, score;
     static bool isGameOver, isGamePaused;
     static Queue<int> snakeBodyX = new Queue<int>();
     static Queue<int> snakeBodyY = new Queue<int>();
     static char direction = 'R'; // Kierunek początkowy: 'R' - w prawo
     static int scoreDisplayY = screenHeight; // Pozycja wyniku
-    static int snakeSpeedHorizontal = 50; // Prędkość w poziomie 
-    static int snakeSpeedVertical = 100; // Prędkość w pionie 
+    static int snakeSpeedHorizontal = 50; // Prędkość w poziomie jest 2x wieksza niż w pionie, ponieważ "rysuje" znaki w liniach konsoli zamiast rysować poszczególne piksele konsoli i trzeba przez to dostosować prędkość poruszania się/całej gry
+    static int snakeSpeedVertical = 100; 
 
 
     static void Main()
@@ -45,7 +45,8 @@ class Program
 
     static void InitializeGame()
     {
-        snakeX = screenWidth / 2;
+        //ustawianie weża na środku mapy/ekranu
+        snakeX = screenWidth / 2; 
         snakeY = screenHeight / 2;
         RandomizeFruitPosition();
         score = 0;
@@ -78,13 +79,15 @@ class Program
             if (Console.KeyAvailable)
             {
                 var key = Console.ReadKey(intercept: true).Key;
+                //Pauzowanie gry na spacji - pierwszy z 3 przycisków w grze
                 if (key == ConsoleKey.Spacebar)
                 {
                     isGamePaused = !isGamePaused;
                 }
+                // Zmiana kierunku w lewo o 90 stopni pod "A" - drugi przycisk w grze
                 else if (key == ConsoleKey.A)
                 {
-                    // Zmiana kierunku w lewo o 90 stopni
+                    
                     switch (direction)
                     {
                         case 'U':
@@ -101,9 +104,10 @@ class Program
                             break;
                     }
                 }
+                // Zmiana kierunku w prawo o 90 stopni - trzeci przycisk
                 else if (key == ConsoleKey.D)
                 {
-                    // Zmiana kierunku w prawo o 90 stopni
+                    
                     switch (direction)
                     {
                         case 'U':
@@ -148,29 +152,31 @@ class Program
                 Thread.Sleep(snakeSpeedVertical); // Prędkość w pionie
                 break;
         }
-
+        //dodawanie punktów
         if (snakeX == fruitX && snakeY == fruitY)
         {
             score++;
             RandomizeFruitPosition();
         }
+        //zapisywanie ruchów węża do kolejki
         else
         {
+            //dodanie pozycji głowy węża na początek kolejki
             snakeBodyX.Enqueue(snakeX);
             snakeBodyY.Enqueue(snakeY);
-
+            //usuwanie ostatniego elementu węża z kolejki
             if (snakeBodyX.Count > score)
             {
                 snakeBodyX.Dequeue();
                 snakeBodyY.Dequeue();
             }
         }
-
+        //uderzenie w sciane
         if (newSnakeX <= 0 || newSnakeX >= screenWidth || newSnakeY <= 0 || newSnakeY >= screenHeight)
         {
             isGameOver = true;
         }
-
+        //sprawdzenie, czy wąż nie zjada samego siebie
         for (int i = 0; i < snakeBodyX.Count; i++)
         {
             if (newSnakeX == snakeBodyX.ToArray()[i] && newSnakeY == snakeBodyY.ToArray()[i])
@@ -186,7 +192,7 @@ class Program
     static void Draw()
     {
         Console.Clear();
-
+        //poziome granice
         for (int i = 0; i < screenWidth; i++)
         {
             Console.SetCursorPosition(i, 0);
@@ -194,7 +200,7 @@ class Program
             Console.SetCursorPosition(i, screenHeight - 1);
             Console.Write("#");
         }
-
+        //pionowe granice
         for (int i = 0; i < screenHeight; i++)
         {
             Console.SetCursorPosition(0, i);
@@ -202,13 +208,13 @@ class Program
             Console.SetCursorPosition(screenWidth - 1, i);
             Console.Write("#");
         }
-
+        //owoc
         Console.SetCursorPosition(fruitX, fruitY);
         Console.Write("*");
-
+        //głowa węża
         Console.SetCursorPosition(snakeX, snakeY);
         Console.Write("O");
-
+        //ciało węża
         for (int i = 0; i < snakeBodyX.Count; i++)
         {
             Console.SetCursorPosition(snakeBodyX.ToArray()[i], snakeBodyY.ToArray()[i]);
