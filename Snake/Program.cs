@@ -11,8 +11,8 @@ class Program
     static int[] snakeBodyY = new int[screenWidth * screenHeight]; // Tablica przechowująca współrzędne Y segmentów ciała węża
     static char direction = 'R'; // Kierunek początkowy: 'R' - w prawo
     static int scoreDisplayY = screenHeight; // Pozycja wyniku
-    static int snakeSpeedHorizontal = 50; // Prędkość w poziomie jest 2x większa niż w pionie, ponieważ "rysuje" znaki w liniach konsoli zamiast rysować poszczególne piksele konsoli i trzeba przez to dostosować prędkość poruszania się/całej gry
-    static int snakeSpeedVertical = 100;
+    static int snakeSpeedHorizontal = 100; // Prędkość w poziomie jest 2x większa niż w pionie, ponieważ "rysuje" znaki w liniach konsoli zamiast rysować poszczególne piksele konsoli i trzeba przez to dostosować prędkość poruszania się/całej gry
+    static int snakeSpeedVertical = 200;
 
     static void Main()
     {
@@ -195,17 +195,17 @@ class Program
         for (int i = 0; i < screenWidth; i++)
         {
             Console.SetCursorPosition(i, 0);
-            Console.Write("#");
+            Console.Write("X");
             Console.SetCursorPosition(i, screenHeight - 1);
-            Console.Write("#");
+            Console.Write("X");
         }
         // Pionowe granice
         for (int i = 0; i < screenHeight; i++)
         {
             Console.SetCursorPosition(0, i);
-            Console.Write("#");
+            Console.Write("X");
             Console.SetCursorPosition(screenWidth - 1, i);
-            Console.Write("#");
+            Console.Write("X");
         }
         // Owoc
         Console.SetCursorPosition(fruitX, fruitY);
