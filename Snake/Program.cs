@@ -12,6 +12,9 @@ class Program
     static Queue<int> snakeBodyY = new Queue<int>();
     static char direction = 'R'; // Kierunek początkowy: 'R' - w prawo
     static int scoreDisplayY = screenHeight; // Pozycja wyniku
+    static int snakeSpeedHorizontal = 50; // Prędkość w poziomie 
+    static int snakeSpeedVertical = 100; // Prędkość w pionie 
+
 
     static void Main()
     {
@@ -33,7 +36,7 @@ class Program
                 Update();
                 Draw();
             }
-            Thread.Sleep(75);
+            //Thread.Sleep(15);
         }
 
         Console.Clear();
@@ -48,6 +51,17 @@ class Program
         score = 0;
         isGameOver = false;
         isGamePaused = false;
+
+        // 5-sekundowe odliczanie
+        for (int i = 5; i > 0; i--)
+        {
+            Console.Clear();
+            Console.SetCursorPosition(screenWidth / 2 - 5, screenHeight / 2);
+            Console.Write("Gra rozpocznie się za " + i + "...");
+            Thread.Sleep(1000); // Czekaj 1 sekundę
+        }
+
+        Console.Clear();
     }
 
     static void RandomizeFruitPosition()
@@ -119,15 +133,19 @@ class Program
         {
             case 'L':
                 newSnakeX--;
+                Thread.Sleep(snakeSpeedHorizontal); // Prędkość w poziomie
                 break;
             case 'R':
                 newSnakeX++;
+                Thread.Sleep(snakeSpeedHorizontal); // Prędkość w poziomie
                 break;
             case 'U':
-                newSnakeY++;
+                newSnakeY--;
+                Thread.Sleep(snakeSpeedVertical); // Prędkość w pionie
                 break;
             case 'D':
-                newSnakeY--;
+                newSnakeY++;
+                Thread.Sleep(snakeSpeedVertical); // Prędkość w pionie
                 break;
         }
 
